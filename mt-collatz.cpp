@@ -15,30 +15,30 @@ int collatzStoppingTime(int n) {
     int steps = 0;
     while (n != 1) {
         if (n % 2 == 0) {
-            n /= 2; // Even case
+            n /= 2; // Even 
         } else {
-            n = 3 * n + 1; // Odd case
+            n = 3 * n + 1; // Odd 
         }
         steps++;
     }
     return steps;
 }
 
-// Function to be executed by each thread
+// Execution by each thread
 void computeCollatz(int N) {
     while (true) {
         int current;
         {
             std::lock_guard<std::mutex> lock(mtx);
             if (COUNTER > N) {
-                break; // Exit if all numbers processed
+                break;  
             }
-            current = COUNTER++; // Get the current number to process
+            current = COUNTER++; // Get current number to run
         }
         
         int stoppingTime = collatzStoppingTime(current);
         if (stoppingTime <= MAX_STOPPING_TIME) {
-            std::lock_guard<std::mutex> lock(mtx); // Lock for histogram update
+            std::lock_guard<std::mutex> lock(mtx); 
             histogram[stoppingTime]++;
         }
     }
@@ -56,9 +56,9 @@ int main(int argc, char *argv[]) {
 
     std::memset(histogram, 0, sizeof(histogram)); // Initialize histogram
 
-    std::vector<std::thread> threads; // Vector to hold threads
+    std::vector<std::thread> threads; // Hold number of threads
 
-    // Start measuring time
+    // Measure runtime
     auto startTime = std::chrono::high_resolution_clock::now();
 
     // Create threads
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
         t.join();
     }
 
-    // End measuring time
+    // End runtime process
     auto endTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = endTime - startTime;
 
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
         std::cout << i << "," << histogram[i] << "\n"; // Print histogram format
     }
 
-    // Print elapsed time
+    // Print runtime
     std::cerr << N << "," << T << "," << elapsed.count() << "\n";
 
     return 0;
